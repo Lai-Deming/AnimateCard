@@ -12,8 +12,10 @@ const Cardcom = (props) => {
       variant="outlined"
       sx={{
         display: "flex",
-        width: "22.66669rem",
+        width: "100%",
+        maxWidth: "22.66669rem",
         padding: "2rem",
+        margin: "auto",
         flexDirection: "column",
         alignItems: "center",
         gap: "2.5rem",
@@ -87,7 +89,7 @@ const Cardcom = (props) => {
           >
             {cardinfo.sections[0].cards[num].title}
           </Typography>
-          <Typography
+          <scan
             sx={{ width: "1rem", height: "1rem" }}
             className="chevron-right"
           >
@@ -108,7 +110,7 @@ const Cardcom = (props) => {
                 />
               </g>
             </svg>
-          </Typography>
+          </scan>
         </Typography>
         <Typography
           sx={{

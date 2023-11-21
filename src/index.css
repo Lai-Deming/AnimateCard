@@ -41,3 +41,90 @@ body {
 .card:hover > .card-content > .title-content > .chevron-right > svg > g > path {
   stroke: #2b70d7;
 }
+
+.title {
+  font-size: 3rem;
+  font-weight: 700;
+  font-style: normal;
+  text-align: center;
+  width: 100%;
+  max-width: 49.1875rem;
+  line-height: 110%;
+}
+
+.pg-container {
+  padding: 7vh 9vw 7vh 9vw;
+}
+
+.cards{
+  position: absolute;
+  top: 45vh;
+  left: 50%;
+  transform: translate(-50%, 0);
+  width: 100%;
+}
+
+.cards-container {
+  display: flex;
+  flex-direction: row;
+  height: 19rem;
+  align-items: center;
+  justify-content: center;
+  column-gap: 4rem;
+  background-color: white;
+  margin: 0.75rem 0;
+}
+
+.card2 {
+  margin-top: -5rem;
+}
+
+.card4 {
+  margin-bottom: -5rem;
+}
+
+.mid-text {
+  font-size: 2.5rem;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 120%;
+  width: 16.125rem;
+  margin: -3rem auto;
+}
+
+.svg {
+  width: 845px;
+  height: 770px;
+  z-index: -1;
+}
+
+@media only screen and (max-width: 1000px) {
+  .pg-container {
+    padding: 1.5rem;
+  }
+  .title {
+    font-size: 2rem;
+  }
+  .cards-container {
+    flex-direction: column;
+    justify-content: space-around;
+    height: 55rem;
+    margin: 0;
+  }
+  .card2 {
+    margin-top: 0;
+  }
+  .card4 {
+    margin-bottom: 0;
+  }
+  .mid-text {
+    display: none;
+  }
+  .cards{
+    position: relative;
+    top: 0;
+  }
+  .svg-container{
+    display: none;
+  }
+}
