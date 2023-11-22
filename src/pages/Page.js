@@ -1,52 +1,57 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Cardcom from "../component/card/Cardcom";
 
 const Page = () => {
+  const [scroll, setScroll] = useState(false);
   useEffect(() => {
-    // set height of the svg path as constant
-    const svg1 = document.getElementById("svgPath1");
-    const length1 = svg1.getTotalLength();
+    const handleScroll = () => {
+      setScroll(!scroll);
+    };
 
-    // start positioning of svg drawing
-    svg1.style.strokeDasharray = length1;
+    if (scroll === true) {
+      // set height of the svg path as constant
+      const svg1 = document.getElementById("svgPath1");
+      const length1 = svg1.getTotalLength();
 
-    // hide svg before scrolling starts
-    svg1.style.strokeDashoffset = length1;
+      // start positioning of svg drawing
+      svg1.style.strokeDasharray = length1;
 
-    window.addEventListener("scroll", function () {
+      // hide svg before scrolling starts
+      svg1.style.strokeDashoffset = length1;
+
+      // set height of the svg path as constant
+      const svg2 = document.getElementById("svgPath2");
+      const length2 = svg2.getTotalLength();
+
+      // start positioning of svg drawing
+      svg2.style.strokeDasharray = length2;
+
+      // hide svg before scrolling starts
+      svg2.style.strokeDashoffset = length2;
+
       const scrollpercent =
         (document.body.scrollTop + document.documentElement.scrollTop) /
         (document.documentElement.scrollHeight -
           document.documentElement.clientHeight);
 
+      console.log(scrollpercent);
+      
       const draw1 = length1 * scrollpercent;
 
       // Reverse the drawing when scroll upwards
       svg1.style.strokeDashoffset = length1 - draw1;
-    });
-
-    // set height of the svg path as constant
-    const svg2 = document.getElementById("svgPath2");
-    const length2 = svg2.getTotalLength();
-
-    // start positioning of svg drawing
-    svg2.style.strokeDasharray = length2;
-
-    // hide svg before scrolling starts
-    svg2.style.strokeDashoffset = length2;
-
-    window.addEventListener("scroll", function () {
-      const scrollpercent =
-        (document.body.scrollTop + document.documentElement.scrollTop) /
-        (document.documentElement.scrollHeight -
-          document.documentElement.clientHeight);
 
       const draw2 = length2 * scrollpercent;
 
       // Reverse the drawing when scroll upwards
       svg2.style.strokeDashoffset = length2 - draw2;
-    });
-  }, []);
+    }
+
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, [scroll]);
 
   return (
     <div className="pg-container text-center">
@@ -114,10 +119,10 @@ const Page = () => {
           <div class="col-md-4" style={{ maxWidth: "22.66669rem" }}>
             <Cardcom cardNum="0" />
           </div>
-          <div class="col-md-4 p-0 card2" style={{ maxWidth: "22.66669rem" }}>
+          <div class="col-md-4 card2" style={{ maxWidth: "22.66669rem" }}>
             <Cardcom cardNum="1" />
           </div>
-          <div class="col-md-4 p-0" style={{ maxWidth: "22.66669rem" }}>
+          <div class="col-md-4" style={{ maxWidth: "22.66669rem" }}>
             <Cardcom cardNum="2" />
           </div>
         </div>
@@ -126,13 +131,13 @@ const Page = () => {
           Insurance
         </div>
         <div class="cards-container">
-          <div class="col-md-4 p-0" style={{ maxWidth: "22.66669rem" }}>
+          <div class="col-md-4" style={{ maxWidth: "22.66669rem" }}>
             <Cardcom cardNum="3" />
           </div>
-          <div class="col-md-4 p-0 card4" style={{ maxWidth: "22.66669rem" }}>
+          <div class="col-md-4 card4" style={{ maxWidth: "22.66669rem" }}>
             <Cardcom cardNum="4" />
           </div>
-          <div class="col-md-4 p-0" style={{ maxWidth: "22.66669rem" }}>
+          <div class="col-md-4" style={{ maxWidth: "22.66669rem" }}>
             <Cardcom cardNum="5" />
           </div>
         </div>
