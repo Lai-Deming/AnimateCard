@@ -1,60 +1,118 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import Cardcom from "../component/card/Cardcom";
 
 const Page = () => {
-  const [scroll, setScroll] = useState(false);
   useEffect(() => {
-    const handleScroll = () => {
-      setScroll(!scroll);
-    };
+    // Variable to track if an animation frame is currently scheduled
+    let ticking = false;
 
-    if (scroll === true) {
-      // set height of the svg path as constant
-      const svg1 = document.getElementById("svgPath1");
-      const length1 = svg1.getTotalLength();
+    // Variable to store the last known scroll position
+    let last_known_scroll_position = 0;
 
-      // start positioning of svg drawing
-      svg1.style.strokeDasharray = length1;
+    // Variable to indicate if the path should be updated
+    let updatePath = false;
 
-      // hide svg before scrolling starts
-      svg1.style.strokeDashoffset = length1;
+    // Select the SVG element and paths
+    const element = document.querySelector("svg");
+    const path1 = element.querySelector("#path1");
+    const path2 = element.querySelector("#path2");
 
-      // set height of the svg path as constant
-      const svg2 = document.getElementById("svgPath2");
-      const length2 = svg2.getTotalLength();
+    let totalLength = 0;
 
-      // start positioning of svg drawing
-      svg2.style.strokeDasharray = length2;
+    // Initialize the paths
+    initPath(path1);
+    initPath(path2);
 
-      // hide svg before scrolling starts
-      svg2.style.strokeDashoffset = length2;
+    // Function to initialize a path
+    function initPath(path) {
+      // Calculate the total length of the path
+      totalLength = path.getTotalLength();
 
-      const scrollpercent =
-        (document.body.scrollTop + document.documentElement.scrollTop) /
-        (document.documentElement.scrollHeight -
-          document.documentElement.clientHeight);
+      // Set the strokeDasharray property to the total length
+      path.style.strokeDasharray = `${totalLength}`;
 
-      console.log(scrollpercent);
-      
-      const draw1 = length1 * scrollpercent;
-
-      // Reverse the drawing when scroll upwards
-      svg1.style.strokeDashoffset = length1 - draw1;
-
-      const draw2 = length2 * scrollpercent;
-
-      // Reverse the drawing when scroll upwards
-      svg2.style.strokeDashoffset = length2 - draw2;
+      // Set the strokeDashoffset property to the total length
+      path.style.strokeDashoffset = totalLength;
     }
 
-    window.addEventListener("scroll", handleScroll);
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, [scroll]);
+    // Create an IntersectionObserver
+    let observer = new IntersectionObserver(
+      (entries, observer) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            // The observed element is intersecting with the viewport
+            console.log(entry);
+            updatePath = true;
+          } else {
+            // The observed element is not intersecting with the viewport
+            updatePath = false;
+          }
+        });
+      },
+      { rootMargin: "0px 0px 0px 0px" }
+    );
+
+    // Observe the SVG element
+    observer.observe(element);
+
+    // Function to update the paths based on scroll position
+    function doSomething(scroll_pos) {
+      if (!updatePath) {
+        return;
+      }
+
+      // Update path1
+      window.requestAnimationFrame(() => {
+        // Calculate the scroll percentage based on the current scroll position
+        const percentage =
+          (document.documentElement.scrollTop + document.body.scrollTop) /
+          (document.documentElement.scrollHeight -
+            document.documentElement.clientHeight);
+
+        // Calculate the length of the path to be drawn based on the percentage
+        const drawLength = percentage > 0 ? totalLength * percentage : 0;
+
+        // Update the strokeDashoffset property of path1 to animate the drawing
+        path1.style.strokeDashoffset =
+          drawLength < totalLength ? totalLength - drawLength : 0;
+      });
+
+      // Update path2
+      window.requestAnimationFrame(() => {
+        const percentage =
+          (document.documentElement.scrollTop + document.body.scrollTop) /
+          (document.documentElement.scrollHeight -
+            document.documentElement.clientHeight);
+        const drawLength = percentage > 0 ? totalLength * percentage : 0;
+        path2.style.strokeDashoffset =
+          drawLength < totalLength ? totalLength - drawLength : 0;
+      });
+    }
+
+    // Event listener for scroll events
+    window.addEventListener("scroll", function (e) {
+      // Get the current scroll position
+      last_known_scroll_position = window.scrollY;
+
+      if (!ticking) {
+        // Use requestAnimationFrame to update the animation
+        window.requestAnimationFrame(function () {
+          // Call the doSomething function to perform the necessary actions
+          doSomething(last_known_scroll_position);
+
+          // Reset the ticking variable to allow for the next animation frame
+          ticking = false;
+        });
+
+        // Set the ticking variable to true to prevent multiple animation frames from being scheduled
+        ticking = true;
+      }
+    });
+  }, []);
 
   return (
     <div className="pg-container text-center">
+      {/* header part */}
       <p
         style={{
           fontSize: "1rem",
@@ -66,9 +124,12 @@ const Page = () => {
         ACTIVE INSURANCE
       </p>
       <br />
+
+      {/* title part */}
       <p className="title mx-auto">
         Protect your business with broad coverage and proactive security
       </p>
+
       <p
         className="mt-5 pt-5"
         style={{
@@ -79,42 +140,49 @@ const Page = () => {
         }}
       >
         Insurance
+        {/* animation line */}
         <div className="svg-container">
-          <svg className="svg">
+          <svg
+            className="svg"
+            preserveAspectRatio="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            {/* lightgray line */}
             <path
               id=""
               class="narmol"
               stroke="#d3d3d3"
               stroke-width="1px"
               fill="none"
+              d="M423.295 2C423.295 12.6667 423.295 23.3333 423.295 34C423.295 34.7879 423.591 36.2816 423.295 37C422.49 38.9567 419.134 37.9131 417.018 37.9444C402.929 38.1532 388.829 38 374.74 38C358.851 38 342.962 38 327.073 38C238.74 38 150.406 38 62.0732 38C42.5546 38 23.0361 38 3.5176 38C1.07274 38 2.32302 40.4151 2.29538 45.6667C2.21955 60.0733 2.29538 74.4819 2.29538 88.8889C2.29538 169.667 2.29538 250.444 2.29538 331.222C2.29538 449.963 2.29538 568.704 2.29538 687.444C2.29538 697.963 2.29538 708.481 2.29538 719C2.29538 725.185 2.29538 731.37 2.29538 737.556C2.29538 737.767 2.47524 737.085 2.68426 737.056C4.45989 736.802 6.4001 737 8.18426 737C62.3324 737 116.481 737 170.629 737C248.184 737 325.74 737 403.295 737C407.555 737 411.814 737 416.073 737C423.093 737 423.295 735.975 423.295 744C423.295 752.333 423.295 760.667 423.295 769 M423.131 2C423.131 12.6667 423.131 23.3333 423.131 34C423.131 34.7879 422.836 36.2816 423.131 37C423.937 38.9567 427.293 37.9131 429.409 37.9444C443.498 38.1532 457.598 38 471.687 38C487.576 38 503.465 38 519.354 38C607.687 38 696.02 38 784.354 38C803.872 38 823.391 38 842.909 38C845.354 38 844.104 40.4151 844.131 45.6667C844.207 60.0733 844.131 74.4819 844.131 88.8889C844.131 169.667 844.131 250.444 844.131 331.222C844.131 449.963 844.131 568.704 844.131 687.444C844.131 697.963 844.131 708.481 844.131 719C844.131 725.185 844.131 731.37 844.131 737.556C844.131 737.767 843.952 737.085 843.743 737.056C841.967 736.802 840.027 737 838.243 737C784.094 737 729.946 737 675.798 737C598.243 737 520.687 737 443.131 737C438.872 737 434.613 737 430.354 737C423.334 737 423.131 735.975 423.131 744C423.131 752.333 423.131 760.667 423.131 769"
+            />
+
+            {/* animation line: path1, path2 */}
+            <path
+              id="path1"
+              class="steel"
               d="M423.295 2C423.295 12.6667 423.295 23.3333 423.295 34C423.295 34.7879 423.591 36.2816 423.295 37C422.49 38.9567 419.134 37.9131 417.018 37.9444C402.929 38.1532 388.829 38 374.74 38C358.851 38 342.962 38 327.073 38C238.74 38 150.406 38 62.0732 38C42.5546 38 23.0361 38 3.5176 38C1.07274 38 2.32302 40.4151 2.29538 45.6667C2.21955 60.0733 2.29538 74.4819 2.29538 88.8889C2.29538 169.667 2.29538 250.444 2.29538 331.222C2.29538 449.963 2.29538 568.704 2.29538 687.444C2.29538 697.963 2.29538 708.481 2.29538 719C2.29538 725.185 2.29538 731.37 2.29538 737.556C2.29538 737.767 2.47524 737.085 2.68426 737.056C4.45989 736.802 6.4001 737 8.18426 737C62.3324 737 116.481 737 170.629 737C248.184 737 325.74 737 403.295 737C407.555 737 411.814 737 416.073 737C423.093 737 423.295 735.975 423.295 744C423.295 752.333 423.295 760.667 423.295 769"
+              stroke-width="1"
+              fill="none"
+              fill-rule="evenodd"
+              stroke-linecap="round"
             />
             <path
-              id="svgPath1"
-              stroke="#4E5051"
-              stroke-width="1px"
-              fill="none"
-              d="M423.295 2C423.295 12.6667 423.295 23.3333 423.295 34C423.295 34.7879 423.591 36.2816 423.295 37C422.49 38.9567 419.134 37.9131 417.018 37.9444C402.929 38.1532 388.829 38 374.74 38C358.851 38 342.962 38 327.073 38C238.74 38 150.406 38 62.0732 38C42.5546 38 23.0361 38 3.5176 38C1.07274 38 2.32302 40.4151 2.29538 45.6667C2.21955 60.0733 2.29538 74.4819 2.29538 88.8889C2.29538 169.667 2.29538 250.444 2.29538 331.222C2.29538 449.963 2.29538 568.704 2.29538 687.444C2.29538 697.963 2.29538 708.481 2.29538 719C2.29538 725.185 2.29538 731.37 2.29538 737.556C2.29538 737.767 2.47524 737.085 2.68426 737.056C4.45989 736.802 6.4001 737 8.18426 737C62.3324 737 116.481 737 170.629 737C248.184 737 325.74 737 403.295 737C407.555 737 411.814 737 416.073 737C423.093 737 423.295 735.975 423.295 744C423.295 752.333 423.295 760.667 423.295 769"
-            />
-            <path
-              id=""
-              class="narmol"
-              stroke="#d3d3d3"
-              stroke-width="1px"
-              fill="none"
+              id="path2"
+              class="steel"
               d="M423.131 2C423.131 12.6667 423.131 23.3333 423.131 34C423.131 34.7879 422.836 36.2816 423.131 37C423.937 38.9567 427.293 37.9131 429.409 37.9444C443.498 38.1532 457.598 38 471.687 38C487.576 38 503.465 38 519.354 38C607.687 38 696.02 38 784.354 38C803.872 38 823.391 38 842.909 38C845.354 38 844.104 40.4151 844.131 45.6667C844.207 60.0733 844.131 74.4819 844.131 88.8889C844.131 169.667 844.131 250.444 844.131 331.222C844.131 449.963 844.131 568.704 844.131 687.444C844.131 697.963 844.131 708.481 844.131 719C844.131 725.185 844.131 731.37 844.131 737.556C844.131 737.767 843.952 737.085 843.743 737.056C841.967 736.802 840.027 737 838.243 737C784.094 737 729.946 737 675.798 737C598.243 737 520.687 737 443.131 737C438.872 737 434.613 737 430.354 737C423.334 737 423.131 735.975 423.131 744C423.131 752.333 423.131 760.667 423.131 769"
-            />
-            <path
-              id="svgPath2"
-              stroke="#4E5051"
-              stroke-width="1px"
+              stroke-width="1"
               fill="none"
-              d="M423.131 2C423.131 12.6667 423.131 23.3333 423.131 34C423.131 34.7879 422.836 36.2816 423.131 37C423.937 38.9567 427.293 37.9131 429.409 37.9444C443.498 38.1532 457.598 38 471.687 38C487.576 38 503.465 38 519.354 38C607.687 38 696.02 38 784.354 38C803.872 38 823.391 38 842.909 38C845.354 38 844.104 40.4151 844.131 45.6667C844.207 60.0733 844.131 74.4819 844.131 88.8889C844.131 169.667 844.131 250.444 844.131 331.222C844.131 449.963 844.131 568.704 844.131 687.444C844.131 697.963 844.131 708.481 844.131 719C844.131 725.185 844.131 731.37 844.131 737.556C844.131 737.767 843.952 737.085 843.743 737.056C841.967 736.802 840.027 737 838.243 737C784.094 737 729.946 737 675.798 737C598.243 737 520.687 737 443.131 737C438.872 737 434.613 737 430.354 737C423.334 737 423.131 735.975 423.131 744C423.131 752.333 423.131 760.667 423.131 769"
+              fill-rule="evenodd"
+              stroke-linecap="round"
             />
           </svg>
         </div>
       </p>
+
+      {/* cards */}
       <div className="cards">
+        {/* cards of up */}
         <div class="cards-container">
           <div class="col-md-4" style={{ maxWidth: "22.66669rem" }}>
             <Cardcom cardNum="0" />
@@ -126,10 +194,14 @@ const Page = () => {
             <Cardcom cardNum="2" />
           </div>
         </div>
-        <div className="mid-text">
+
+        {/*centerial text:Active Insurance */}
+        <div className="centerial-text">
           Active <br />
           Insurance
         </div>
+
+        {/* cards of down */}
         <div class="cards-container">
           <div class="col-md-4" style={{ maxWidth: "22.66669rem" }}>
             <Cardcom cardNum="3" />
@@ -142,6 +214,8 @@ const Page = () => {
           </div>
         </div>
       </div>
+
+      {/* text : Security & Services */}
       <p
         className="my-2"
         style={{
