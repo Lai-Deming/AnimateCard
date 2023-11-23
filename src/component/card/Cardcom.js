@@ -8,6 +8,7 @@ import cardinfo from "../../assets/CardInfo.json";
 const Cardcom = (props) => {
   const num = props.cardNum;
   return (
+    // card component
     <Card
       variant="outlined"
       sx={{
@@ -22,10 +23,11 @@ const Cardcom = (props) => {
         backgroundColor: "rgba(249, 249, 248, 1)",
         border: "1px solid rgba(233, 232, 232, 1)",
         borderRadius: 0,
-        cursor: "pointer"
+        cursor: "pointer",
       }}
       className="card"
     >
+      {/* content of card */}
       <CardContent
         sx={{
           display: "flex",
@@ -40,6 +42,7 @@ const Cardcom = (props) => {
         }}
         className="card-content"
       >
+        {/* image-icon */}
         <Typography
           sx={{
             width: "3rem",
@@ -72,10 +75,12 @@ const Cardcom = (props) => {
             </g>
           </svg>
         </Typography>
+        {/* title content */}
         <Typography
           sx={{ display: "flex", alignItems: "center", gap: "0.25rem" }}
           className="title-content"
         >
+          {/* title */}
           <Typography
             sx={{
               color: "rgba(0, 0, 0, 1)",
@@ -89,6 +94,7 @@ const Cardcom = (props) => {
           >
             {cardinfo.sections[0].cards[num].title}
           </Typography>
+          {/* right-arrow */}
           <scan
             sx={{ width: "1rem", height: "1rem" }}
             className="chevron-right"
@@ -112,6 +118,7 @@ const Cardcom = (props) => {
             </svg>
           </scan>
         </Typography>
+        {/* main content */}
         <Typography
           sx={{
             fontSize: "0.875rem",
