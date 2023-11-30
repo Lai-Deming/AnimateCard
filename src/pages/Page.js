@@ -130,8 +130,8 @@ const Page = () => {
         Protect your business with broad coverage and proactive security
       </p>
 
-      <p
-        className="mt-5 pt-5"
+      <div
+        className="mt-5 pt-5 position-relative"
         style={{
           fontSize: "2rem",
           fontWeight: 700,
@@ -178,39 +178,38 @@ const Page = () => {
             />
           </svg>
         </div>
-      </p>
+        {/* cards */}
+        <div className="cards">
+          {/* cards of up */}
+          <div class="cards-container">
+            <div class="col-md-4" style={{ maxWidth: "22.66669rem" }}>
+              <Cardcom cardNum={0} />
+            </div>
+            <div class="col-md-4 card2" style={{ maxWidth: "22.66669rem" }}>
+              <Cardcom cardNum={1} />
+            </div>
+            <div class="col-md-4" style={{ maxWidth: "22.66669rem" }}>
+              <Cardcom cardNum={2} />
+            </div>
+          </div>
 
-      {/* cards */}
-      <div className="cards">
-        {/* cards of up */}
-        <div class="cards-container">
-          <div class="col-md-4" style={{ maxWidth: "22.66669rem" }}>
-            <Cardcom cardNum="0" />
+          {/*centerial text:Active Insurance */}
+          <div className="centerial-text">
+            Active <br />
+            Insurance
           </div>
-          <div class="col-md-4 card2" style={{ maxWidth: "22.66669rem" }}>
-            <Cardcom cardNum="1" />
-          </div>
-          <div class="col-md-4" style={{ maxWidth: "22.66669rem" }}>
-            <Cardcom cardNum="2" />
-          </div>
-        </div>
 
-        {/*centerial text:Active Insurance */}
-        <div className="centerial-text">
-          Active <br />
-          Insurance
-        </div>
-
-        {/* cards of down */}
-        <div class="cards-container">
-          <div class="col-md-4" style={{ maxWidth: "22.66669rem" }}>
-            <Cardcom cardNum="3" />
-          </div>
-          <div class="col-md-4 card4" style={{ maxWidth: "22.66669rem" }}>
-            <Cardcom cardNum="4" />
-          </div>
-          <div class="col-md-4" style={{ maxWidth: "22.66669rem" }}>
-            <Cardcom cardNum="5" />
+          {/* cards of down */}
+          <div class="cards-container">
+            <div class="col-md-4" style={{ maxWidth: "22.66669rem" }}>
+              <Cardcom cardNum={3} />
+            </div>
+            <div class="col-md-4 card4" style={{ maxWidth: "22.66669rem" }}>
+              <Cardcom cardNum={4} />
+            </div>
+            <div class="col-md-4" style={{ maxWidth: "22.66669rem" }}>
+              <Cardcom cardNum={5} />
+            </div>
           </div>
         </div>
       </div>
