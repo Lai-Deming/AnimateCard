@@ -113,7 +113,7 @@ const Page = () => {
 
   return (
     <Box
-      padding={{ xs: "1.5rem", md: "7vh 9vw 7vh 9vw" }}
+      padding={{ xs: "1.5rem", md: "7vh 0" }}
       textAlign="center"
       fontFamily={"Public Sans"}
     >
