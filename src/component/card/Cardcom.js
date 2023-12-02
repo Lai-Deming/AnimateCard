@@ -3,6 +3,7 @@ import CardContent from "@mui/material/CardContent";
 import Card from "@mui/material/Card";
 import Typography from "@mui/material/Typography";
 import cardinfo from "../../assets/CardInfo.json";
+import { Box } from "@mui/material";
 
 const Cardcom = (props) => {
   const num = props.cardNum;
@@ -14,7 +15,7 @@ const Cardcom = (props) => {
       data-testid="card"
       variant="outlined"
       sx={{
-        width: "100%",
+        // width: "100%",
         maxWidth: "22.66669rem",
         padding: "2rem",
         margin: "auto",
@@ -79,18 +80,18 @@ const Cardcom = (props) => {
           </svg>
         </Typography>
         {/* Title of Card */}
-        <div
+        <Box
           data-testid="cardTitle"
-          style={{
+          sx={{
             display: "flex",
             alignItems: "center",
             gap: hover ? "12px" : "4px",
           }}
         >
           {/* Title's content of Card */}
-          <div
+          <Box
             data-testid="cardTitleContent"
-            style={{
+            sx={{
               textAlign: "center",
               fontSize: "1rem",
               fontStyle: "normal",
@@ -101,7 +102,7 @@ const Cardcom = (props) => {
             }}
           >
             {cardinfo.sections[0].cards[num].title}
-          </div>
+          </Box>
           {/* Right arrow of Card */}
           <svg
             data-testid="chevron-right"
@@ -121,7 +122,7 @@ const Cardcom = (props) => {
               />
             </g>
           </svg>
-        </div>
+        </Box>
         {/* Main Content of Card */}
         <Typography
           sx={{
